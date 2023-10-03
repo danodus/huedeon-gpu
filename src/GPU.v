@@ -97,6 +97,8 @@ module GPU(
   wire draw_enable = ~KEY[0];
   reg enable_vertex_color =0;
   
+  wire done;
+
   always @(negedge KEY[2])
   begin
     enable_vertex_color <= !enable_vertex_color;
@@ -137,7 +139,7 @@ module GPU(
     .o_y            (vram_address_y),
     .o_write_pixel  (write_pixel),
     .o_busy         (LEDR[0]),
-    .o_done         (LEDR[1])
+    .o_done         (done)
   );
   
   
@@ -163,31 +165,32 @@ module GPU(
   
   always @(posedge CLOCK_50)
   begin
-    rv1 <= rng;
-    rv2 <= rng2;
-    rv3 <= rv2;
-    rv4 <= rv1+rv2;
-    
-    x1 <= `FIXPT_INT(rv1 * 8);
-    x2 <= `FIXPT_INT(rv2 * 8 + 1);
-    x3 <= `FIXPT_INT(rv3 * 8 + 2);
-    y1 <= `FIXPT_INT(rv4 * 8 + 3);
-    y2 <= `FIXPT_INT(rv3 * 8 + 4);
-    y3 <= `FIXPT_INT(rv1 * 8 + 5);
-    
-    
-    r1 <= r1 + rv1;
-    r2 <= r2 - rv2;
-    r3 <= r3 + rv4;
+    if (done) begin
+      rv1 <= rng;
+      rv2 <= rng2;
+      rv3 <= rv2;
+      rv4 <= rv1+rv2;
+      
+      x1 <= `FIXPT_INT(rv1 * 8);
+      x2 <= `FIXPT_INT(rv2 * 8 + 1);
+      x3 <= `FIXPT_INT(rv3 * 8 + 2);
+      y1 <= `FIXPT_INT(rv4 * 8 + 3);
+      y2 <= `FIXPT_INT(rv3 * 8 + 4);
+      y3 <= `FIXPT_INT(rv1 * 8 + 5);
+      
+      
+      r1 <= r1 + rv1;
+      r2 <= r2 - rv2;
+      r3 <= r3 + rv4;
 
-    g1 <= g1 - rv3;
-    g2 <= g2 + rv1;
-    g3 <= g3 + rv4;
+      g1 <= g1 - rv3;
+      g2 <= g2 + rv1;
+      g3 <= g3 + rv4;
 
-    b1 <= b1 + rv1;
-    b2 <= b2 + rv4;
-    b3 <= b3 - rv3;
-
+      b1 <= b1 + rv1;
+      b2 <= b2 + rv4;
+      b3 <= b3 - rv3;
+    end
   end
   
   
@@ -200,6 +203,7 @@ module GPU(
   VRAM vram(
     // framebuffer
     .i_a_clk          (clk25),
+    .i_a_enable       (1'b1),
     .i_a_address      (fb_vram_address),
     .i_a_write_enable (1'b0),
     .i_a_wr_data      (16'b0),
@@ -207,6 +211,7 @@ module GPU(
 
     // gpu
     .i_b_clk          (CLOCK_50),
+    .i_b_enable       (1'b1),
     .i_b_address      (raster_address),
     .i_b_write_enable (write_pixel),
     .i_b_wr_data      (raster_color)
