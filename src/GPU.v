@@ -11,6 +11,7 @@ module GPU(
 
   //////////// CLOCK //////////
   input                   CLOCK_50,
+  input                   CLOCK_PIX,
 
   //////////// SDRAM //////////
   // output        [12:0]    DRAM_ADDR,
@@ -45,17 +46,12 @@ module GPU(
   //////////// VGA //////////
   output         [7:0]    VGA_B,
   output                  VGA_BLANK_N,
-  output                  VGA_CLK,
   output         [7:0]    VGA_G,
   output                  VGA_HS,
   output         [7:0]    VGA_R,
   output                  VGA_SYNC_N,
   output                  VGA_VS
 );
-  wire clk25, clk4;
-  
-  CLKDivider clkdiv(.clk(CLOCK_50), .clkdiv2(clk25), .clkdiv16(clk4));
-  
  
   //=======================================================
   
@@ -202,7 +198,7 @@ module GPU(
 
   VRAM vram(
     // framebuffer
-    .i_a_clk          (clk25),
+    .i_a_clk          (CLOCK_PIX),
     .i_a_enable       (1'b1),
     .i_a_address      (fb_vram_address),
     .i_a_write_enable (1'b0),
@@ -219,10 +215,9 @@ module GPU(
   
 
   VGAFramebuffer vga_fb(
-    .i_clk          (clk25),
+    .i_clk          (CLOCK_PIX),
     .i_pixel        (fb_pixel),
     .o_address      (fb_vram_address),
-    .o_vga_clk      (VGA_CLK),
     .o_vga_r        (VGA_R),
     .o_vga_g        (VGA_G),
     .o_vga_b        (VGA_B),

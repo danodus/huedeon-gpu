@@ -16,7 +16,7 @@ module ROM(
   wire [30:0] daddr = address[31:2];
 
   initial begin
-   $readmemh("src/riscado-v/gcc/rom.mem", memory);
+   $readmemh("rom.mem", memory);
   end
 
   // Acesso a memória.

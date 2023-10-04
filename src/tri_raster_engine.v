@@ -408,7 +408,7 @@ module TriRasterEngine #(parameter XLEN=`FIXPT_REAL_BITS - 1)
       o_x       <= ex3_x;
       o_y       <= ex3_y;
 
-      $display("%d,%d,%d,%d,%d", ex3_y,ex3_x,ex3_r,ex3_g,ex3_b);
+      //$display("%d,%d,%d,%d,%d", ex3_y,ex3_x,ex3_r,ex3_g,ex3_b);
     end
   end
 

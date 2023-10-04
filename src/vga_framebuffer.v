@@ -7,7 +7,6 @@ module VGAFramebuffer(
   input [15:0]        i_pixel,
   input [17:0]        i_display_offset,
   output [17:0]       o_address,
-  output wire         o_vga_clk,
   output wire [7:0]   o_vga_r,
   output wire [7:0]   o_vga_g,
   output wire [7:0]   o_vga_b,
@@ -36,11 +35,10 @@ module VGAFramebuffer(
   assign o_vga_r = r_color;
   assign o_vga_b = b_color;
   assign o_vga_g = g_color;
-  assign o_vga_blank_n = 1'b1;
+  assign o_vga_blank_n = visible;
   assign o_vga_sync_n = 1'b0;
   assign o_vga_hs = hsync;
   assign o_vga_vs = vsync;
-  assign o_vga_clk = i_clk;
   
   VGAEncoder vga(
     .clk      (i_clk),

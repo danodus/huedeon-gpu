@@ -11,11 +11,11 @@ module ByteReader(
   input  [31:0] dataIn,
   output [31:0] dataOut
 );
-  wire [7:0] byte = (offset == 0) ? dataIn[ 7: 0] :
+  wire [7:0] b = (offset == 0) ? dataIn[ 7: 0] :
                     (offset == 1) ? dataIn[15: 8] :
                     (offset == 2) ? dataIn[23:16] :
                     dataIn[31:24];
-  assign dataOut = signExtend ? { { 24{byte[7]} }, byte } : { 24'b0, byte };
+  assign dataOut = signExtend ? { { 24{b[7]} }, b } : { 24'b0, b };
 endmodule
 
 

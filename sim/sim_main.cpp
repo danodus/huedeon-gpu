@@ -24,14 +24,15 @@ double sc_time_stamp()
     return 0.0;
 }
 
-void pulse_clk(const std::unique_ptr<Vtop>& top)
+void advance_clk(const std::unique_ptr<Vtop>& top)
 {
-    top->CLOCK_50 = 1;
+    static int clock_counter = 0;
+
+    top->CLOCK_50 = clock_counter & 0x1;
+    top->CLOCK_PIX = clock_counter & 0x2;
     top->contextp()->timeInc(1);
     top->eval();    
-    top->CLOCK_50 = 0;
-    top->contextp()->timeInc(1);
-    top->eval();
+    clock_counter++;
 }
 
 void to_float32(uint32_t *ret, float32_t v)
@@ -116,11 +117,17 @@ int main(int argc, char **argv, char **env)
         size_t pixel_index = 0;
 
         top->CLOCK_50 = 0;
+        top->CLOCK_PIX = 0;
         top->KEY = 0b1111;
 
         while (!contextp->gotFinish() && !quit)
         {
-            if (top->VGA_CLK) {
+            advance_clk(top);
+
+            if (!top->CLOCK_50)
+                continue;
+                
+            if (top->CLOCK_PIX) {
                 // Update video display
                 if (was_vsync && top->VGA_VS)
                 {
@@ -238,9 +245,6 @@ int main(int argc, char **argv, char **env)
 
                 SDL_RenderPresent(renderer);
             }
-
-            pulse_clk(top);
-
         }
 
         // Final model cleanup

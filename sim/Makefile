@@ -1,14 +1,13 @@
 VERILATOR = verilator
 
 LDFLAGS := -LDFLAGS "$(shell sdl2-config --libs)"
-CFLAGS := -CFLAGS "$(shell sdl2-config --cflags) -g"
+CFLAGS := -CFLAGS "$(shell sdl2-config --cflags)"
 
 RTLDIR := ../src
 SRC := sim_main.cpp
 
 RTL_SRC :=	\
 	bbox_iterator.v \
-	clk_divider.v \
 	clut_ram.v \
 	div_uu.v \
 	edge_function_evaluator.v \
@@ -16,6 +15,7 @@ RTL_SRC :=	\
 	GPU.v \
 	huedeon_ctrl.v \
 	lfsr5.v \
+	pipeline_ctrl.v \
 	raster_pipeline_ex1.v \
 	raster_pipeline_ex2.v \
 	raster_pipeline_ex3.v \
@@ -24,7 +24,16 @@ RTL_SRC :=	\
 	tri_raster_engine.v \
 	vga_encoder.v \
 	vga_framebuffer.v \
-	vram.v
+	vram.v \
+	RISCV_SOC.v \
+	alu.v \
+	control_unit.v \
+	load_store.v \
+	program_counter.v \
+	ram.v \
+	register_file.v \
+	riscv.v \
+	rom.v
 
 all: sim
 
@@ -37,6 +46,7 @@ sim: top.sv $(SRC)
 
 run: sim
 	cp -r ../src/data .
+	cp ../src/riscado-v/gcc/rom.mem .
 	obj_dir/Vtop
 
 .PHONY: all clean

@@ -395,9 +395,9 @@ int main() {
   hw_accel = 0;
   for(;;) {
 
-    uint32_t st = *IOSTATUS;
-    hw_accel = st & 1;
-    enable_vsync = st & 2;
+    //uint32_t st = *IOSTATUS;
+    hw_accel = 1;
+    enable_vsync = 1;
     
     update_animator(&x1_a);
     update_animator(&x3_a);

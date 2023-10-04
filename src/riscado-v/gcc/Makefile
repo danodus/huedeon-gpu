@@ -34,8 +34,9 @@ prog.elf: $(OBJECTS) $(ASM_OBJECTS)
 rom.mem: prog.elf
 	@echo "Building $< -> $@"
 	@$(OC) -O binary prog.elf rom.bin --only-section .text\*
+	@hexdump -v -e '1/4 "%08x\n"' rom.bin > rom.mem
 #	@hxdump rom.bin  rom.mem mem4
-	@hxdump rom.bin  rom.mif mif4
+#	@hxdump rom.bin  rom.mif mif4
 
 prog.txt: prog.elf
 	@echo "Dumping $@..."

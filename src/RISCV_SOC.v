@@ -5,6 +5,7 @@
 
 module RISCV_SOC(
   input                   CLOCK_50,
+  input                   CLOCK_PIX,
   input          [3:0]    KEY,
   input          [9:0]    SW,
   output reg     [9:0]    LEDR,
@@ -23,13 +24,8 @@ module RISCV_SOC(
   wire vsync;
   reg vsync_status;
 
-  wire vga_clock_25mhz;
   wire reset = ~KEY[0];
 
-  CLKDivider clkdiv(
-    .clk      (CLOCK_50),
-    .clkdiv2  (vga_clock_25mhz)
-  );
   wire [31:0] cpuDataOut;
   wire [31:0] busAddress;
   wire        busWriteEnable;
@@ -98,7 +94,7 @@ module RISCV_SOC(
 
   VRAM vram(
     // framebuffer
-    .i_a_clk          (vga_clock_25mhz),
+    .i_a_clk          (CLOCK_PIX),
     .i_a_enable       (1'b1),
     .i_a_address      (fb_vram_address),
     .i_a_write_enable (1'b0),
@@ -115,11 +111,10 @@ module RISCV_SOC(
   );
   
   VGAFramebuffer vga_fb(
-    .i_clk            (vga_clock_25mhz),
+    .i_clk            (CLOCK_PIX),
     .i_pixel          (fb_pixel),
     .i_display_offset (fb_display_offset),
     .o_address        (fb_vram_address),
-    .o_vga_clk        (VGA_CLK),
     .o_vga_r          (VGA_R),
     .o_vga_g          (VGA_G),
     .o_vga_b          (VGA_B),

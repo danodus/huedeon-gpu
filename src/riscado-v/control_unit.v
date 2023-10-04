@@ -60,7 +60,7 @@ module ControlUnit(
     begin
       if (state == FETCH0) 
       begin
-        $display("FETCH0");
+        //$display("FETCH0");
         writeEnable     <= 0;
         state           <= FETCH1;
         irWriteEnable   <= 1;
@@ -80,18 +80,18 @@ module ControlUnit(
       else
       if (state == FETCH1)
       begin
-        $display("FETCH1");
+        //$display("FETCH1");
         state         <= DECODE;
         irWriteEnable <= 0;
         incrementPc   <= 0;
       end
       else
       begin
-        $display("Execute %x", ir);
+        //$display("Execute %x", ir);
         // LUI
         if (opcode == 7'b0110111)
         begin
-          $display("LUI");
+          //$display("LUI");
           aluSrcB         <= `ALU_SRC_B_IMM_U_TYPE;
           aluOperation    <= `ALU_B;
           regWriteEnable  <= 1;
@@ -101,7 +101,7 @@ module ControlUnit(
         // AUIPC
         if (opcode == 7'b0010111)
         begin
-          $display("AUIPC");
+          //$display("AUIPC");
           aluSrcA         <= `ALU_SRC_A_PREV_PC;
           aluSrcB         <= `ALU_SRC_B_IMM_U_TYPE;
           aluOperation    <= `ALU_ADD;
@@ -113,7 +113,7 @@ module ControlUnit(
         // I-TYPE
         if (opcode == 7'b0010011)
         begin
-          $display("I-TYPE");
+          //$display("I-TYPE");
           case (funct3)
           3'b000: aluOperation <= `ALU_ADD; 
           3'b001: aluOperation <= `ALU_SLL; 
@@ -132,7 +132,7 @@ module ControlUnit(
         // R-TYPE
         if (opcode == 7'b0110011)
         begin
-          $display("R-TYPE"); 
+          //$display("R-TYPE"); 
           case (funct3)
           3'b000: aluOperation <= (funct7 == 7'h20) ? `ALU_SUB : `ALU_ADD;
           3'b001: aluOperation <= `ALU_SLL;
@@ -151,7 +151,7 @@ module ControlUnit(
         // B-TYPE
         if (opcode == 7'b1100011)
         begin
-          $display("B-TYPE");
+          //$display("B-TYPE");
           if (state == DECODE)
           begin
             case (funct3)
@@ -195,7 +195,7 @@ module ControlUnit(
         // JAL
         if (opcode == 7'b1101111)
         begin
-          $display("JAL");
+          //$display("JAL");
           if (state == DECODE)
           begin
             aluSrcA         <= `ALU_SRC_A_PREV_PC;
@@ -218,7 +218,7 @@ module ControlUnit(
         // JALR
         if (opcode == 7'b1100111)
         begin
-          $display("JALR");
+          //$display("JALR");
           if (state == DECODE)
           begin
             aluSrcA         <= `ALU_SRC_A_REG;
@@ -314,7 +314,7 @@ module ControlUnit(
         
         else
         begin
-          $display("Error %x [%x]", ir, opcode);
+          //$display("Error %x [%x]", ir, opcode);
           state       <= FETCH0;
         end
       end

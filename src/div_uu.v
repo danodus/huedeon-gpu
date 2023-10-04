@@ -131,8 +131,8 @@ module div_uu(clk, ena, z, d, q, s, div0, ovf);
 	// synopsys translate_off
 	initial
 	begin
-	  if(d_width !== z_width / 2)
-	    $display("div.v parameter error (d_width != z_width/2).");
+	  //if(d_width !== z_width / 2)
+	    //$display("div.v parameter error (d_width != z_width/2).");
 	end
 	// synopsys translate_on
 

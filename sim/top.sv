@@ -1,5 +1,6 @@
 module top(
     input wire logic   CLOCK_50,
+    input wire logic   CLOCK_PIX,
     input wire logic [3:0] KEY,
     output logic [7:0] VGA_B,
     output logic       VGA_BLANK_N,
@@ -11,12 +12,32 @@ module top(
     output logic       VGA_VS 
 );
 
+/*
     GPU gpu(
         .CLOCK_50,
+        .CLOCK_PIX,
         .HEX0(),
         .HEX1(),
         .KEY(KEY),
         .LEDR(),
+        .VGA_B,
+        .VGA_BLANK_N,
+        .VGA_G,
+        .VGA_HS,
+        .VGA_R,
+        .VGA_SYNC_N,
+        .VGA_VS
+    );
+*/
+
+    RISCV_SOC riscv_soc(
+        .CLOCK_50,
+        .CLOCK_PIX,
+        .KEY(KEY),
+        .SW(),
+        .LEDR(),
+        .HEX0(),
+        .HEX1(),
         .VGA_B,
         .VGA_BLANK_N,
         .VGA_CLK,

@@ -1,3 +1,4 @@
 data
 logs
 obj_dir
+*.mem
