@@ -1,0 +1,7 @@
+*.log
+*.asc
+*.bin
+*.history
+top.json
+data
+*.mem
