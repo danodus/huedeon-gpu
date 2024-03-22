@@ -35,17 +35,6 @@ void advance_clk(const std::unique_ptr<Vtop>& top)
     clock_counter++;
 }
 
-void to_float32(uint32_t *ret, float32_t v)
-{
-    union {
-        float32_t f;
-        uint32_t u;
-    } _uf;
-
-    _uf.f = v;
-    *ret = _uf.u;
-}
-
 int main(int argc, char **argv, char **env)
 {
     SDL_Init(SDL_INIT_VIDEO);
